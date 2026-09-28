@@ -18,7 +18,7 @@
 
 body {
   margin: 0;
-  background-color: #f6f2fc;
+  background-color: #ffffff;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -26,10 +26,11 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1200px;
   min-height: 100vh;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 40px 24px;
+  background-color: #ffffff;
 }
 
 .brand-gradient-text {
@@ -56,10 +57,10 @@ body {
 
 .desktop-card {
   background: #ffffff;
-  border-radius: 28px;
-  padding: 36px;
-  box-shadow: 0 20px 60px rgba(48, 27, 78, 0.08);
-  border: 1px solid rgba(232, 225, 239, 0.8);
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  border: none;
 }
 
 .option-card {
