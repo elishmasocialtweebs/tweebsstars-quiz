@@ -4,7 +4,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { motion } from 'framer-motion';
 import { Instagram, ArrowRight, ShieldCheck, Zap, BarChart3, Users } from 'lucide-react';
 import { useQuizStore } from '@/store/useQuizStore';
 import { useQuery } from '@tanstack/react-query';
@@ -65,13 +64,7 @@ export default function WelcomeScreen() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className="w-full py-8"
-    >
+    <div className="w-full py-8">
       <div className="desktop-card grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         {/* Left Column: Brand Hero Banner */}
         <div className="lg:col-span-6 space-y-6">
@@ -177,6 +170,6 @@ export default function WelcomeScreen() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

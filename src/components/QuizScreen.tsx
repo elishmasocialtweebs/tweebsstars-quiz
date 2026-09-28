@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, ArrowRight, BarChart2, Info, User } from 'lucide-react';
 import { useQuizStore } from '@/store/useQuizStore';
 import { QUIZ_QUESTIONS } from '@/data/questions';
@@ -29,14 +28,7 @@ export default function QuizScreen() {
   const isUserCorrect = selectedOption === q.answer;
 
   return (
-    <motion.div
-      key={q.id}
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      transition={{ duration: 0.3 }}
-      className="w-full py-6"
-    >
+    <div key={q.id} className="w-full py-6">
       <div className="desktop-card space-y-6">
         {/* Top Header Bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-purple-line">
@@ -148,65 +140,56 @@ export default function QuizScreen() {
             </div>
 
             {/* Feedback Box */}
-            <AnimatePresence>
-              {isAnswered && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="space-y-3 pt-3"
+            {isAnswered && (
+              <div className="space-y-3 pt-3">
+                <div
+                  className={`p-4 rounded-2xl text-xs md:text-sm leading-relaxed font-medium ${
+                    q.scored
+                      ? isUserCorrect
+                        ? 'feedback-good'
+                        : 'feedback-bad'
+                      : 'feedback-neutral'
+                  }`}
                 >
-                  <div
-                    className={`p-4 rounded-2xl text-xs md:text-sm leading-relaxed font-medium ${
-                      q.scored
-                        ? isUserCorrect
-                          ? 'feedback-good'
-                          : 'feedback-bad'
-                        : 'feedback-neutral'
-                    }`}
-                  >
-                    {q.scored ? (
-                      isUserCorrect ? (
-                        <div>
-                          <p className="font-extrabold text-base mb-1">🎉 Correct Answer!</p>
-                          <p>{q.explanation}</p>
-                        </div>
-                      ) : (
-                        <div>
-                          <p className="font-extrabold text-base mb-1">👀 TweebTech Insights showed:</p>
-                          <p>{q.explanation}</p>
-                        </div>
-                      )
-                    ) : (
+                  {q.scored ? (
+                    isUserCorrect ? (
                       <div>
-                        <p className="font-extrabold text-base mb-1">🧠 Insightful Guess!</p>
+                        <p className="font-extrabold text-base mb-1">🎉 Correct Answer!</p>
                         <p>{q.explanation}</p>
                       </div>
-                    )}
-                  </div>
-
-                  {q.note && (
-                    <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-purple-soft text-xs text-muted">
-                      <Info className="w-4 h-4 text-purple shrink-0 mt-0.5" />
-                      <p>{q.note}</p>
+                    ) : (
+                      <div>
+                        <p className="font-extrabold text-base mb-1">👀 TweebTech Insights showed:</p>
+                        <p>{q.explanation}</p>
+                      </div>
+                    )
+                  ) : (
+                    <div>
+                      <p className="font-extrabold text-base mb-1">🧠 Insightful Guess!</p>
+                      <p>{q.explanation}</p>
                     </div>
                   )}
+                </div>
 
-                  <motion.button
-                    initial={{ scale: 0.96, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    onClick={() => nextQuestion(total)}
-                    className="brand-button w-full rounded-2xl py-4 font-black text-base flex items-center justify-center gap-2 shadow-lg shadow-purple/20 cursor-pointer mt-2"
-                  >
-                    <span>{currentIndex < total - 1 ? 'Next Question' : 'View Results'}</span>
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                {q.note && (
+                  <div className="flex items-start gap-2.5 p-3.5 rounded-xl bg-purple-soft text-xs text-muted">
+                    <Info className="w-4 h-4 text-purple shrink-0 mt-0.5" />
+                    <p>{q.note}</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => nextQuestion(total)}
+                  className="brand-button w-full rounded-2xl py-4 font-black text-base flex items-center justify-center gap-2 shadow-lg shadow-purple/20 cursor-pointer mt-2"
+                >
+                  <span>{currentIndex < total - 1 ? 'Next Question' : 'View Results'}</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
