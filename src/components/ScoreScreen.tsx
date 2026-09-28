@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import {
@@ -12,10 +12,11 @@ import {
   Tooltip,
   Cell,
 } from 'recharts';
-import { RotateCcw, Share2, Award, Zap, CheckCircle2 } from 'lucide-react';
+import { RotateCcw, Share2, Award, Zap } from 'lucide-react';
 import { useQuizStore } from '@/store/useQuizStore';
 
 export default function ScoreScreen() {
+  const [isMounted, setIsMounted] = useState(false);
   const {
     handle,
     correctCount,
@@ -27,6 +28,7 @@ export default function ScoreScreen() {
   const percentage = scoredCount > 0 ? Math.round((correctCount / scoredCount) * 100) : 0;
 
   useEffect(() => {
+    setIsMounted(true);
     if (percentage >= 60) {
       confetti({
         particleCount: 100,
@@ -65,10 +67,10 @@ export default function ScoreScreen() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       className="w-full py-6"
     >
       <div className="desktop-card space-y-8">
@@ -144,21 +146,27 @@ export default function ScoreScreen() {
               </div>
 
               <div className="h-56 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
-                    <XAxis dataKey="category" tick={{ fontSize: 12, fill: '#756c7e' }} />
-                    <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#756c7e' }} />
-                    <Tooltip
-                      formatter={(val: number) => [`${val}%`, 'Accuracy']}
-                      contentStyle={{ borderRadius: '16px', border: '1px solid #e8e1ef', padding: '10px 14px' }}
-                    />
-                    <Bar dataKey="Accuracy" radius={[8, 8, 0, 0]}>
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                {isMounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                      <XAxis dataKey="category" tick={{ fontSize: 12, fill: '#756c7e' }} />
+                      <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#756c7e' }} />
+                      <Tooltip
+                        formatter={(val: number) => [`${val}%`, 'Accuracy']}
+                        contentStyle={{ borderRadius: '16px', border: '1px solid #e8e1ef', padding: '10px 14px' }}
+                      />
+                      <Bar dataKey="Accuracy" radius={[8, 8, 0, 0]}>
+                        {chartData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-full flex items-center justify-center text-xs text-muted">
+                    Loading Chart...
+                  </div>
+                )}
               </div>
             </div>
 
