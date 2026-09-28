@@ -162,12 +162,7 @@ export default function WelcomeScreen() {
             </button>
           </form>
 
-          <div className="flex items-center gap-2.5 p-3.5 rounded-2xl bg-white border border-purple-line/80 text-xs text-muted">
-            <ShieldCheck className="w-5 h-5 text-purple shrink-0" />
-            <p>
-              No password or private login needed. Public engagement signals are retrieved via TweebTech Insights API.
-            </p>
-          </div>
+
         </div>
       </div>
     </div>
