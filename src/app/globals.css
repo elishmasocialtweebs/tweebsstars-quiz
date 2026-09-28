@@ -18,7 +18,7 @@
 
 body {
   margin: 0;
-  background-color: #ece8f3;
+  background-color: #f6f2fc;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -26,12 +26,10 @@ body {
 
 .app-container {
   width: 100%;
-  max-width: 460px;
+  max-width: 1120px;
   min-height: 100vh;
   margin: 0 auto;
-  background: linear-gradient(160deg, #fbf9ff 0%, #f5effb 100%);
-  padding: 16px;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.05);
+  padding: 32px 24px;
 }
 
 .brand-gradient-text {
@@ -43,39 +41,49 @@ body {
 .brand-button {
   background: linear-gradient(90deg, var(--purple), var(--pink));
   color: white;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
 .brand-button:hover {
-  opacity: 0.95;
-  transform: translateY(-1px);
+  opacity: 0.96;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(109, 69, 255, 0.3);
 }
 
 .brand-button:active {
   transform: translateY(0);
 }
 
+.desktop-card {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 36px;
+  box-shadow: 0 20px 60px rgba(48, 27, 78, 0.08);
+  border: 1px solid rgba(232, 225, 239, 0.8);
+}
+
 .option-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  border: 1.5px solid var(--line);
   background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .option-card:hover {
   border-color: var(--purple);
   background-color: #faf7ff;
+  transform: translateX(3px);
 }
 
 .option-card.selected {
   border-color: var(--purple);
   background-color: #f3ecff;
-  box-shadow: 0 0 0 2px rgba(109, 69, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(109, 69, 255, 0.2);
 }
 
 .option-card.correct {
@@ -92,18 +100,32 @@ body {
 
 .feedback-good {
   background-color: var(--greenbg);
-  border: 1px solid #bce6c8;
+  border: 1.5px solid #bce6c8;
   color: #1a5730;
 }
 
 .feedback-bad {
   background-color: var(--redbg);
-  border: 1px solid #f6c8da;
+  border: 1.5px solid #f6c8da;
   color: #6b1d49;
 }
 
 .feedback-neutral {
   background-color: #f6f2fd;
-  border: 1px solid #e1d5f5;
+  border: 1.5px solid #e1d5f5;
   color: #483173;
+}
+
+.progress-bar-track {
+  height: 10px;
+  border-radius: 20px;
+  background: #eae4f2;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--purple), var(--pink));
+  transition: width 0.4s ease;
+  border-radius: 20px;
 }
