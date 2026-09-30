@@ -2,6 +2,8 @@
 
 import React, { useMemo, useRef, useState } from 'react';
 import FloatingHearts, { type Heart } from '@/components/ui/floating-hearts';
+import PhoneFrame from '@/components/ui/phone-frame';
+import SlideButton from '@/components/ui/slide-button';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -136,17 +138,8 @@ export default function SignUpPage() {
     <div className="fixed inset-0 z-10 flex">
       {/* Left: the clips stacked (shuffled list, twice) and moved downward on a loop so it never stops */}
       <div className="hidden h-full w-1/2 items-center justify-center p-[1cm] md:flex" aria-hidden="true">
-        {/* A phone, drawn in CSS: titanium body, side buttons, black bezel, the screen with the island and the home bar */}
         <div ref={panelRef} className="relative aspect-[0.488] h-full max-h-[860px]">
-          <div className="absolute inset-0 rounded-[13.5%/6.6%] bg-[#2b2b2d] shadow-[0_30px_80px_rgba(0,0,0,0.7),inset_0_0_0_1.5px_#55555a,inset_0_0_0_4px_#141416]">
-            {/* Buttons: mute, volume up, volume down on the left; power on the right */}
-            <span className="absolute -left-[3px] top-[17%] h-[3.5%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -left-[3px] top-[24%] h-[7%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -left-[3px] top-[33%] h-[7%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -right-[3px] top-[27%] h-[10%] w-[3px] rounded-r-sm bg-[#4a4a4e]" />
-          </div>
-          {/* Screen */}
-          <div className="absolute inset-[3.2%_3.2%] overflow-hidden rounded-[11.5%/5.6%] bg-black">
+          <PhoneFrame homeBar>
             <div className="video-marquee flex w-full flex-col">
               {strip.map((src, i) => (
                 <video
@@ -162,10 +155,7 @@ export default function SignUpPage() {
                 />
               ))}
             </div>
-            {/* Dynamic island and the home bar */}
-            <span className="absolute left-1/2 top-[2.2%] h-[3.6%] w-[31%] -translate-x-1/2 rounded-full bg-black" />
-            <span className="absolute bottom-[1.4%] left-1/2 h-[5px] w-[36%] -translate-x-1/2 rounded-full bg-white/85" />
-          </div>
+          </PhoneFrame>
           {/* Sits over the phone, not clipped by it, so the hearts fly out past the right edge */}
           <FloatingHearts hearts={hearts} />
         </div>
@@ -237,14 +227,7 @@ export default function SignUpPage() {
               {errors.followers && <p className="mt-1 text-xs font-light text-red-500">{errors.followers.message}</p>}
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="group relative mt-4 w-full overflow-hidden rounded-xl bg-[#f7e014] py-3.5 font-poppins text-base font-semibold text-black disabled:opacity-50"
-            >
-              <span aria-hidden="true" className="absolute inset-0 translate-y-full bg-[#e12669] transition-transform duration-500 ease-out group-hover:translate-y-0" />
-              <span className="relative z-10">Continue</span>
-            </button>
+            <SlideButton type="submit" disabled={isSubmitting} label="Continue" className="mt-3 w-full rounded-xl py-3.5 text-base" />
 
             <p className="text-center font-poppins text-xs leading-relaxed text-[#9a9a9a]">
               By continuing, you agree to our

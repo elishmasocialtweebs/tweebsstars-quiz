@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import { useQuizStore, useHydrated } from '@/store/useQuizStore';
 import { QUIZ_QUESTIONS } from '@/data/questions';
 import { ROUTES, AMOUNT } from '@/config/site';
+import SlideButton from '@/components/ui/slide-button';
+import BlackBackdrop from '@/components/ui/black-backdrop';
 
 // Comes right after the sign-up page. One white card per question, with two more cards fanned out behind it:
 // dashes for progress, "QUESTION 01", the question, radio options (or the amount box), then Back / Next.
@@ -84,12 +86,12 @@ export default function QuizPage() {
     exit: { opacity: 0, transition: { delay: 0.35, duration: 0.2 } },   // writing stays during the swing, goes as the card dips behind
   };
 
-  if (!hydrated || !name) return <div className="fixed inset-0 -z-10 bg-black" aria-hidden="true" />;
+  if (!hydrated || !name) return <BlackBackdrop />;
 
   return (
     <div className="flex w-full items-center justify-center py-2 md:min-h-[calc(100vh-80px)] md:py-0">
       {/* The question pages stay plain black, like the welcome page */}
-      <div className="fixed inset-0 -z-10 bg-black" aria-hidden="true" />
+      <BlackBackdrop />
 
       <div className="relative w-full max-w-[520px]">
         {/* The two cards fanned out behind */}
@@ -183,15 +185,7 @@ export default function QuizPage() {
             <button type="button" onClick={onBack} className="card-action font-normal hover:underline underline-offset-4">
               Back
             </button>
-            <button
-              type="button"
-              onClick={onNext}
-              disabled={!canContinue}
-              className="card-action group relative overflow-hidden rounded-xl bg-[#f7e014] px-8 py-3.5 transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <span aria-hidden="true" className="absolute inset-0 translate-y-full bg-[#e12669] transition-transform duration-500 ease-out group-hover:translate-y-0" />
-              <span className="relative z-10">{currentIndex < total - 1 ? 'Next' : 'Finish'}</span>
-            </button>
+            <SlideButton onClick={onNext} disabled={!canContinue} label={currentIndex < total - 1 ? 'Next' : 'Finish'} className="rounded-xl px-8 py-3.5 text-base" />
           </div>
         </motion.div>
         </motion.div>

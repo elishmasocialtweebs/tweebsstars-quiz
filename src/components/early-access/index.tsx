@@ -7,6 +7,8 @@ import { CheckCircle2, Gauge } from 'lucide-react';
 // Foot of the results page: a phone peeking up from the bottom showing the report, with two floating cards,
 // and the Get access button under it.
 import { SITE } from '@/config/site';
+import PhoneFrame from '@/components/ui/phone-frame';
+import SlideButton from '@/components/ui/slide-button';
 export default function EarlyAccess() {
   return (
     <motion.section
@@ -20,14 +22,7 @@ export default function EarlyAccess() {
       {/* The phone, cut off at the bottom, with two floating cards */}
       <div className="relative mx-auto h-[340px] w-full max-w-[560px] overflow-hidden">
         <div className="absolute left-1/2 top-0 aspect-[0.488] w-[300px] -translate-x-1/2 md:w-[320px]">
-          <div className="absolute inset-0 rounded-[13.5%/6.6%] bg-[#2b2b2d] shadow-[0_30px_80px_rgba(0,0,0,0.7),inset_0_0_0_1.5px_#55555a,inset_0_0_0_4px_#141416]">
-            <span className="absolute -left-[3px] top-[17%] h-[3.5%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -left-[3px] top-[24%] h-[7%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -left-[3px] top-[33%] h-[7%] w-[3px] rounded-l-sm bg-[#4a4a4e]" />
-            <span className="absolute -right-[3px] top-[27%] h-[10%] w-[3px] rounded-r-sm bg-[#4a4a4e]" />
-          </div>
-          <div className="absolute inset-[3.2%_3.2%] overflow-hidden rounded-[11.5%/5.6%] bg-[#ffffff] px-5 pt-14 text-left">
-            <span className="absolute left-1/2 top-[2.2%] h-[3.6%] w-[31%] -translate-x-1/2 rounded-full bg-black" />
+          <PhoneFrame screenClassName="bg-[#ffffff] px-5 pt-14 text-left">
             <p className="font-poppins text-lg font-bold text-black">Your report</p>
             <p className="mt-3 font-poppins text-[10px] uppercase tracking-[0.14em] text-[#9a9a9a]">Top insight</p>
             <div className="mt-2 rounded-xl border-[0.5px] border-[#e5e5e5] bg-[#ffffff] p-3 shadow-[0_8px_24px_rgba(0,0,0,0.08)]">
@@ -42,7 +37,7 @@ export default function EarlyAccess() {
               <span className="flex items-center gap-2 font-poppins text-[13px] font-semibold text-black"><CheckCircle2 className="h-4 w-4 text-[#f7e014]" /> Content Power</span>
               <p className="mt-1 pl-6 font-poppins text-[11px] text-[#6b6b6b]">What content works best</p>
             </div>
-          </div>
+          </PhoneFrame>
         </div>
 
         {/* Floating cards */}
@@ -79,15 +74,7 @@ export default function EarlyAccess() {
       </div>
 
       {/* The real Get access button, under the phone */}
-      <a
-        href={SITE.accessUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group relative mx-auto mt-2 inline-block overflow-hidden rounded-xl bg-[#f7e014] px-10 py-3.5 font-poppins text-base font-semibold text-black"
-      >
-        <span aria-hidden="true" className="absolute inset-0 translate-y-full bg-[#e12669] transition-transform duration-500 ease-out group-hover:translate-y-0" />
-        <span className="relative z-10">Get access now →</span>
-      </a>
+      <SlideButton href={SITE.accessUrl} newTab label="Get access now →" className="mt-2 rounded-xl px-10 py-3.5 text-base" />
     </motion.section>
   );
 }

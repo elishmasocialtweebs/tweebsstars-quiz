@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import EarlyAccess from '@/components/early-access';
 import { useQuizStore, useHydrated } from '@/store/useQuizStore';
 import { SITE, ROUTES } from '@/config/site';
+import BlackBackdrop from '@/components/ui/black-backdrop';
 
 // After the last question: the results page. Heading, the four locked areas in a row, then the phone with
 // the Get access button at the foot. Everything stays locked until the full report exists.
@@ -32,11 +33,11 @@ export default function ResultsPage() {
   const name = useQuizStore((s) => s.name);
   // No sign-up yet: start from there
   useEffect(() => { if (hydrated && !name) router.replace(ROUTES.signUp); }, [hydrated, name, router]);
-  if (!hydrated || !name) return <div className="fixed inset-0 -z-10 bg-black" aria-hidden="true" />;
+  if (!hydrated || !name) return <BlackBackdrop />;
 
   return (
     <div className="flex w-full flex-col items-center gap-10 py-6 md:py-10">
-      <div className="fixed inset-0 -z-10 bg-black" aria-hidden="true" />
+      <BlackBackdrop />
 
       {/* Heading */}
       <motion.div {...rise(0)} className="w-full max-w-[640px] text-center">
