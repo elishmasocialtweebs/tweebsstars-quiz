@@ -18,8 +18,17 @@
 
 body {
   margin: 0;
-  background-color: #ffffff;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Dark grain background, drawn in CSS (no image): three soft grey glows on black plus a fine noise layer on top. */
+  background-color: #000000;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.10 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"),
+    radial-gradient(60% 45% at 88% 12%, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.06) 35%, rgba(0,0,0,0) 70%),
+    radial-gradient(50% 40% at 6% 62%, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 40%, rgba(0,0,0,0) 72%),
+    radial-gradient(35% 30% at 96% 96%, rgba(255,255,255,0.12) 0%, rgba(0,0,0,0) 70%),
+    linear-gradient(180deg, #050505 0%, #0a0a0a 50%, #030303 100%);
+  background-size: 200px 200px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  font-family: var(--font-poppins), 'Poppins', system-ui, -apple-system, sans-serif;
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
 }
@@ -30,7 +39,7 @@ body {
   min-height: 100vh;
   margin: 0 auto;
   padding: 40px 24px;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 .brand-gradient-text {
@@ -55,13 +64,25 @@ body {
   transform: translateY(0);
 }
 
+/* Black theme: the card is black too, and everything inside reads in white or light grey. */
 .desktop-card {
-  background: #ffffff;
-  border-radius: 0;
-  padding: 0;
+  background: transparent;
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 32px;
   box-shadow: none;
   border: none;
 }
+.desktop-card .text-ink,
+.desktop-card .text-ink\/90 { color: #ffffff; }
+.desktop-card .text-muted { color: #c8c8c8; }
+.desktop-card .bg-white { background-color: #141414; }
+.desktop-card .border-purple-line { border-color: #2a2a2a; }
+.desktop-card input {
+  background-color: #141414;
+  color: #ffffff;
+}
+.desktop-card input::placeholder { color: #8a8a8a; }
 
 .option-card {
   display: flex;
@@ -69,22 +90,23 @@ body {
   gap: 16px;
   padding: 18px 22px;
   border-radius: 20px;
-  border: 1.5px solid var(--line);
-  background-color: #ffffff;
+  border: 1.5px solid #2a2a2a;
+  background-color: #141414;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .option-card:hover {
   border-color: var(--purple);
-  background-color: #faf7ff;
+  background-color: #1c1c1c;
   transform: translateX(3px);
 }
 
 .option-card.selected {
   border-color: var(--purple);
-  background-color: #f3ecff;
-  box-shadow: 0 0 0 3px rgba(109, 69, 255, 0.2);
+  background-color: #222222;
+  box-shadow: 0 0 0 3px rgba(109, 69, 255, 0.35);
 }
 
 .option-card.correct {
@@ -130,3 +152,82 @@ body {
   transition: width 0.4s ease;
   border-radius: 20px;
 }
+
+/* Sign-up page video: the shuffled clip list is stacked twice and slides downward for ever (half the strip = one cycle). */
+@keyframes video-scroll-down {
+  from { transform: translateY(-50%); }
+  to { transform: translateY(0); }
+}
+.video-marquee {
+  animation: video-scroll-down 30s linear infinite;
+  will-change: transform;
+}
+
+/* Like hearts that pop out of the sign-up video frame near the end of a clip: rise, drift right past the edge, fade. */
+@keyframes heart-pop {
+  0%   { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  15%  { transform: translate(calc(var(--drift) * 0.25), -30px) scale(1.05); opacity: 1; }
+  70%  { transform: translate(calc(var(--drift) * 0.8), -130px) scale(1); opacity: 0.9; }
+  100% { transform: translate(var(--drift), -190px) scale(0.85); opacity: 0; }
+}
+.heart-pop {
+  opacity: 0;
+  animation: heart-pop 2.2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+/* House text styles for the question cards. Reuse these on any new page so the fonts stay the same everywhere:
+   card-label = small grey labels ("Question 01", "Select only one"), card-title = the question, card-option = an answer. */
+@layer components {
+  .card-label { font-family: var(--font-poppins), 'Poppins', sans-serif; font-size: 0.875rem; font-weight: 400; color: #9a9a9a; }
+  .card-title { font-family: var(--font-poppins), 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; line-height: 1.35; color: #000; }
+  .card-option { font-family: var(--font-poppins), 'Poppins', sans-serif; font-size: 1rem; font-weight: 400; color: #000; }
+  .card-action { font-family: var(--font-poppins), 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; color: #000; }
+}
+
+/* Question 3 amount slider: thin track, black fill up to the dot (set by --fill), solid black dot that grows a little on hover. */
+.amount-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  background: transparent;
+  cursor: pointer;
+}
+.amount-slider::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #000 0%, #000 var(--fill, 0%), #dcdcdc var(--fill, 0%), #dcdcdc 100%);
+}
+.amount-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -8.5px;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #000;
+  border: none;
+  transition: transform 0.15s ease;
+}
+.amount-slider:hover::-webkit-slider-thumb { transform: scale(1.15); }
+.amount-slider:active::-webkit-slider-thumb { transform: scale(1.05); }
+.amount-slider::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: #dcdcdc;
+}
+.amount-slider::-moz-range-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: #000;
+}
+.amount-slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: #000;
+  border: none;
+  transition: transform 0.15s ease;
+}
+.amount-slider:hover::-moz-range-thumb { transform: scale(1.15); }
+.amount-slider:focus-visible { outline: none; }

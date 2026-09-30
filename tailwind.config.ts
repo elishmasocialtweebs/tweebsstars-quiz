@@ -9,6 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // shadcn-style theme tokens used by components/ui (black theme: white circle, black arrow)
+        background: "#000000",
+        foreground: "#ffffff",
+        primary: "#ffffff",
         purple: {
           DEFAULT: "#6d45ff",
           soft: "#f7f2ff",
@@ -27,7 +31,8 @@ const config: Config = {
         redline: "#8b2b61",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ["var(--font-poppins)", "Poppins", "sans-serif"],
+        poppins: ["var(--font-poppins)", "Poppins", "sans-serif"],
       },
       borderRadius: {
         card: "27px",

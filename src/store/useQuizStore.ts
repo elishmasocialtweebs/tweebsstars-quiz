@@ -1,80 +1,62 @@
+import { useEffect, useState } from 'react';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-export type ScreenStep = 'welcome' | 'quiz' | 'score';
-
+// What the quiz remembers about the player: who they are (from the sign-up page), which question they are
+// on and what they answered. Pages are real routes now, so the page itself is not stored here.
 interface QuizState {
-  step: ScreenStep;
-  handle: string;
-  currentIndex: number;
-  correctCount: number;
-  scoredCount: number;
-  userAnswers: Record<number, string>;
-  isAnswered: boolean;
-  selectedOption: string | null;
-  insightsData: any | null;
-  isLoadingInsights: boolean;
+  name: string;          // from the sign-up page
+  phone: string;         // from the sign-up page, dial code prefixed
+  followers: string;     // follower count typed on the sign-up page, as a plain number
+  handle: string;        // Instagram handle, @ prefixed
+  currentIndex: number;  // which question card is showing
+  userAnswers: Record<number, string>;   // question id -> option id, or the slider amount
 
+  setProfile: (name: string, phone: string, followers: string) => void;
   setHandle: (handle: string) => void;
-  setStep: (step: ScreenStep) => void;
-  setInsights: (data: any) => void;
-  setLoadingInsights: (loading: boolean) => void;
-  selectOption: (questionId: number, optionId: string, isCorrect: boolean, isScored: boolean) => void;
-  nextQuestion: (totalQuestions: number) => void;
+  setAnswer: (questionId: number, value: string) => void;   // pick or slide, can change until Next
+  nextQuestion: (totalQuestions: number) => boolean;        // returns true when the quiz is finished
+  goToQuestion: (index: number) => void;
   resetQuiz: () => void;
 }
 
-export const useQuizStore = create<QuizState>((set) => ({
-  step: 'welcome',
+// Saved in the browser (localStorage) so a refresh keeps the profile and the answers.
+export const useQuizStore = create<QuizState>()(persist((set, get) => ({
+  name: '',
+  phone: '',
+  followers: '',
   handle: '',
   currentIndex: 0,
-  correctCount: 0,
-  scoredCount: 0,
   userAnswers: {},
-  isAnswered: false,
-  selectedOption: null,
-  insightsData: null,
-  isLoadingInsights: false,
 
+  setProfile: (name, phone, followers) => set({ name, phone, followers }),
   setHandle: (handle) => set({ handle }),
-  setStep: (step) => set({ step }),
-  setInsights: (data) => set({ insightsData: data }),
-  setLoadingInsights: (loading) => set({ isLoadingInsights: loading }),
 
-  selectOption: (questionId, optionId, isCorrect, isScored) =>
-    set((state) => {
-      if (state.isAnswered) return state;
-      return {
-        isAnswered: true,
-        selectedOption: optionId,
-        userAnswers: { ...state.userAnswers, [questionId]: optionId },
-        correctCount: isCorrect ? state.correctCount + 1 : state.correctCount,
-        scoredCount: isScored ? state.scoredCount + 1 : state.scoredCount,
-      };
-    }),
+  setAnswer: (questionId, value) =>
+    set((state) => ({ userAnswers: { ...state.userAnswers, [questionId]: value } })),
 
-  nextQuestion: (totalQuestions) =>
-    set((state) => {
-      if (state.currentIndex < totalQuestions - 1) {
-        return {
-          currentIndex: state.currentIndex + 1,
-          isAnswered: false,
-          selectedOption: null,
-        };
-      } else {
-        return {
-          step: 'score',
-        };
-      }
-    }),
+  nextQuestion: (totalQuestions) => {
+    const { currentIndex } = get();
+    if (currentIndex < totalQuestions - 1) {
+      set({ currentIndex: currentIndex + 1 });
+      return false;
+    }
+    return true;
+  },
+
+  goToQuestion: (index) => set({ currentIndex: Math.max(0, index) }),
 
   resetQuiz: () =>
-    set({
-      step: 'welcome',
-      currentIndex: 0,
-      correctCount: 0,
-      scoredCount: 0,
-      userAnswers: {},
-      isAnswered: false,
-      selectedOption: null,
-    }),
+    set({ name: '', phone: '', followers: '', handle: '', currentIndex: 0, userAnswers: {} }),
+}), {
+  name: 'tweebstars-quiz',
+  storage: createJSONStorage(() => localStorage),
 }));
+
+// True once the page is on the client and the saved state is available. Pages wait for this before rendering
+// anything that depends on the store, so server and client render the same HTML (no hydration errors).
+export function useHydrated() {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { setHydrated(true); }, []);
+  return hydrated;
+}
